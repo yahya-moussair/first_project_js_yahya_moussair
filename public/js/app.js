@@ -1,19 +1,41 @@
 //! create class users
 class User {
   static userArray = [];
-  constructor(fullName, email, age, password) {
+  constructor(fullName, email, age, password, money) {
     this.fullName = fullName;
     this.email = email;
     this.age = age;
     this.password = password;
+    this.money = money;
     User.userArray.push(this);
+  }
+  Withdraw() {
+    let withdrawMoney = parseInt(
+      prompt("enter how much you want to Withdraw : ")
+    );
+    if (this.money <= withdrawMoney) {
+      alert("you are dont have this money in your wallet : ");
+      services = prompt(
+        "this is all our services :\nWithdraw\n Deposit\n Take a Loan\n Invest\n"
+      );
+    } else {
+      this.money -= withdrawMoney;
+      alert(
+        "the Withdraw transaction has been succesfully , now you have : " +
+          this.money
+      );
+      services = prompt(
+        "this is all our services :\nWithdraw\n Deposit\n Take a Loan\n Invest\n"
+      );
+    }
   }
 }
 let user1 = new User(
   "Yahya Moussair",
   "yahyamoussair05@gmail.com",
   21,
-  "Yahya#04"
+  "Yahya#04",
+  1000
 );
 //! ask the user if he want to log in or  sign up or change password and make it lowercase
 let ask = prompt("You want login , sign up Or change password , Or exit : ")
@@ -59,9 +81,10 @@ for (let i = 0; ; i++) {
     break;
   }
 }
-
+//! password regex
+const passwordRegex = /[@#\-+*\/]/;
 //! if the user choice is sign up
-if (removeSpaceFromMiddle(ask) == "signup") {
+const signup = () => {
   //!fullname
   let nameAsk = prompt("enter your Full name :").trim();
   //! forcheck the length of the fullname string wihout spacing
@@ -131,8 +154,6 @@ if (removeSpaceFromMiddle(ask) == "signup") {
   }
   //! password
   let passwordAsk = prompt("Enter a password :").trim();
-  //! password regex
-  const passwordRegex = /[@#\-+*\/]/;
   for (let i = 0; ; i++) {
     if (
       passwordAsk != removeSpaceFromMiddle(passwordAsk) ||
@@ -142,36 +163,82 @@ if (removeSpaceFromMiddle(ask) == "signup") {
       passwordAsk = prompt(
         "Please enter a password wihout space in the middle and must be more than 7 characters and at least contain one special character :"
       ).trim();
-    }
-    else{
-        alert('your password is '+ passwordAsk)
-        break;
+    } else {
+      alert("your password is " + passwordAsk);
+      break;
     }
   }
   //! comfirm password
   let passwordComfirmAsk = prompt("Confirm your password :").trim();
-  for (let i = 0; passwordComfirmAsk != passwordAsk ; i++) {
-    passwordComfirmAsk = prompt("the password is not match , enter the password :");
+  for (let i = 0; passwordComfirmAsk != passwordAsk; i++) {
+    passwordComfirmAsk = prompt(
+      "the password is not match , enter the password :"
+    );
   }
-}
+  //!//! tell the user he can log out anytime
+  alert(
+    "You can log out any time you want , just tell me `log out` in the prompt"
+  );
+};
 
 //! if the user choice is login
-if (removeSpaceFromMiddle(ask) == "login") {
-    let login = prompt('Please enter you email : ')
-    let passwordUser = prompt('Please enter your password : ')
-    //! verify email existing
-    for (let i = 3; ; i--) {
-        let emailFind = User.userArray.findIndex((e) => e.email == login)
-        if (emailFind == -1) {
-            login = prompt('wrong email , try again :')
-        }else if(User.userArray[emailFind].password != passwordUser){
-            passwordUser = prompt('wrong password , try again :')
-        }
-        else{
-            alert('welcom to your account Mr . '+User.userArray[emailFind].fullName)
-            break;
-        }
+const login = () => {
+  let login = prompt("Please enter you email : ");
+  let passwordUser = prompt("Please enter your password : ");
+  //! verify email existing
+  for (let i = 0; ; i++) {
+    let emailFind = User.userArray.findIndex((e) => e.email == login);
+    if (emailFind == -1) {
+      login = prompt("wrong email , try again :");
+    } else if (User.userArray[emailFind].password != passwordUser) {
+      passwordUser = prompt("wrong password , try again :");
+    } else {
+      alert(
+        "welcom to your account Mr . " + User.userArray[emailFind].fullName
+      );
+      alert("you have in your ballance : " + User.userArray[emailFind].money);
+      let services = prompt(
+        "this is all our services :\nWithdraw\n Deposit\n Take a Loan\n Invest\n Log Out "
+      );
     }
-    //! tell the user he can log out anytime
-    alert('You can log out any time you want , just tell me `log out` in the prompt')
+  }
+};
+//! if the user choice is change password
+const changePassword = () => {
+  //! verify email existing
+  let login = prompt("Please enter you email : ");
+  let changePassword = prompt("Please enter you new password : ");
+  for (let i = 0; ; i++) {
+    let emailFind = User.userArray.findIndex((e) => e.email == login);
+    if (emailFind == -1) {
+      login = prompt("wrong email , try again :");
+    } else {
+      for (
+        let i = 0;
+        changePassword != removeSpaceFromMiddle(changePassword) ||
+        changePassword.length < 7 ||
+        validateName(changePassword, passwordRegex) == false;
+        i++
+      ) {
+        changePassword = prompt(
+          "Please enter a password wihout space in the middle and must be more than 7 characters and at least contain one special character :"
+        );
+      }
+    }
+    //! assign the new password to user 
+    User.userArray[emailFind].password = changePassword;
+    alert("Congratulation you new password is : " + changePassword);
+    break
+  }
+};
+
+if (removeSpaceFromMiddle(ask) == "changepassword") {
+  changePassword();
+//   login()
+} else if (removeSpaceFromMiddle(ask) == "signup") {
+  signup();
+} else if (removeSpaceFromMiddle(ask) == "login") {
+  login();
 }
+console.log(user1.password);
+
