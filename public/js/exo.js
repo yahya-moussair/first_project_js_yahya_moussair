@@ -22,7 +22,7 @@
 //^             - Check for leading or trailing spaces.
 //^             - The first letter should be capitalized.
 //^             - After each space, the first letter should remain capitalized.
-//^             - Check that all other characters are in lowercase.
+//^             - Check that all other   are in lowercase.
 //^             - Do not save the Name if it has less than 5 characters (excluding spaces).
 //^             - Do not save the Name if it contains numbers, "@", or similar special characters.
 
