@@ -9,7 +9,7 @@ class User {
     User.userArray.push(this);
   }
 }
-let yahya = new User(
+let user1 = new User(
   "Yahya Moussair",
   "yahyamoussair05@gmail.com",
   21,
@@ -153,4 +153,25 @@ if (removeSpaceFromMiddle(ask) == "signup") {
   for (let i = 0; passwordComfirmAsk != passwordAsk ; i++) {
     passwordComfirmAsk = prompt("the password is not match , enter the password :");
   }
+}
+
+//! if the user choice is login
+if (removeSpaceFromMiddle(ask) == "login") {
+    let login = prompt('Please enter you email : ')
+    let passwordUser = prompt('Please enter your password : ')
+    //! verify email existing
+    for (let i = 3; ; i--) {
+        let emailFind = User.userArray.findIndex((e) => e.email == login)
+        if (emailFind == -1) {
+            login = prompt('wrong email , try again :')
+        }else if(User.userArray[emailFind].password != passwordUser){
+            passwordUser = prompt('wrong password , try again :')
+        }
+        else{
+            alert('welcom to your account Mr . '+User.userArray[emailFind].fullName)
+            break;
+        }
+    }
+    //! tell the user he can log out anytime
+    alert('You can log out any time you want , just tell me `log out` in the prompt')
 }
